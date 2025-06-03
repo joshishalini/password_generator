@@ -5,7 +5,7 @@ module Password
     LOWER_CHARS = ('a'..'z').to_a
     UPPER_CHARS = ('A'..'Z').to_a
 
-    attr_reader :length, :uppercase, :lowercase, :number, :special
+    attr_reader :length, :uppercase, :lowercase, :number, :special, :error
 
     def initialize(length:, uppercase: true, lowercase: true, number: 2, special: 1)
 		  @length = length
@@ -13,17 +13,22 @@ module Password
 		  @lowercase = lowercase
 		  @number = number
 		  @special = special
+      @error = nil
+
 		  validate_options
 		end
 
     def generate
+      return error if error
+
       password = []
       password += special_chars
       password += number_chars
       password += required_letters
 
       remaining = length - password.size
-      password += Array.new(remaining) { available_letters.sample }
+
+      password += Array.new(remaining) { available_letters.sample } unless remaining < 0
 
       password.shuffle.join
     end
@@ -31,9 +36,32 @@ module Password
     private
 
     def validate_options
-      raise ArgumentError, 'Length must be positive' unless length.positive?
-      raise ArgumentError, 'At least one of uppercase or lowercase must be true' unless uppercase || lowercase
-      raise ArgumentError, 'Sum of number and special characters exceeds length' if (number + special) > length
+      unless length.is_a?(Integer) && length.positive?
+        @error = "Length must be a positive integer."
+        return
+      end
+
+      unless number.is_a?(Integer) && number >= 0
+        @error = "Number must be a non-negative integer."
+        return
+      end
+
+      unless special.is_a?(Integer) && special >= 0
+        @error = "Special must be a non-negative integer."
+        return
+      end
+
+      unless uppercase || lowercase
+        @error = "At least one of uppercase or lowercase must be true."
+        return
+      end
+
+      required_letters_count = (uppercase ? 1 : 0) + (lowercase ? 1 : 0)
+      total_required = number + special + required_letters_count
+
+      if total_required > length
+        @error = "Password too short: length=#{length}, but requires at least #{total_required} characters."
+      end
     end
 
     def special_chars
@@ -60,4 +88,4 @@ module Password
   end
 end
 
-puts Password::Generator.new(length: 8, uppercase: true, lowercase: true, number: 2, special: 1).generate
+puts Password::Generator.new(length: 8, uppercase: true, lowercase: true, number: -1, special: 0).generate
