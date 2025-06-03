@@ -46,7 +46,7 @@ RSpec.describe Password::Generator do
 
     it 'raises error when number + special exceeds length' do
       expect {
-        described_class.new(length: 4, number: 3, special: 2)
+        described_class.new(length: 3, number: 3, special: 2)
       }.to raise_error(ArgumentError, /Sum of number and special/)
     end
 

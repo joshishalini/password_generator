@@ -1,6 +1,6 @@
 module Password
   class Generator
-    SPECIAL_CHARS = ["@", "%", "!", "?", "*", "^", "&"]
+    SPECIAL_CHARS = %w[@ % ! ? * ^ &]
     NUMBER_CHARS = ('0'..'9').to_a
     LOWER_CHARS = ('a'..'z').to_a
     UPPER_CHARS = ('A'..'Z').to_a
@@ -60,4 +60,4 @@ module Password
   end
 end
 
-# puts Password::Generator.new(length: 9, uppercase: false, lowercase: true, number: 2, special: 1).generate
+puts Password::Generator.new(length: 8, uppercase: true, lowercase: true, number: 2, special: 1).generate
