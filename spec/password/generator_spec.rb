@@ -4,25 +4,25 @@ require_relative '../../lib/password/generator'
 
 RSpec.describe Password::Generator do
   context 'valid password generation' do
-    it 'generate with correct length' do
+    it 'generate password with correct length' do
       generator = described_class.new(length: 12, number: 2, special: 2)
       password = generator.generate
       expect(password.length).to eq(12)
     end
 
-    it 'generate with minimum one lowercase char' do
+    it 'generate password with minimum one lowercase char' do
       generator = described_class.new(length: 10, uppercase: false, lowercase: true, number: 2, special: 1)
       password = generator.generate
       expect(password).to match(/[a-z]/)
     end
 
-    it 'generate with minimum one uppercase char' do
+    it 'generate password with minimum one uppercase char' do
       generator = described_class.new(length: 5, uppercase: true, lowercase: false, number: 3, special: 1)
       password = generator.generate
       expect(password).to match(/[A-Z]/)
     end
 
-    it 'generate with expect 2 number' do
+    it 'generate password with expect 3 number' do
       generator = described_class.new(length: 5, uppercase: false, lowercase: true, number: 3, special: 1)
       password = generator.generate
       digit_count = password.scan(/\d/).count
