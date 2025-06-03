@@ -28,7 +28,7 @@ puts generator.generate
 # => e.g., "A7S1!uRq"
 
 ```
-##  Test
+## ⚙️ Test
 
 ```ruby
 bundle install
