@@ -1,4 +1,5 @@
 module Password
+  # This class is responsible to Generate Password
   class Generator
     SPECIAL_CHARS = %w[@ % ! ? * ^ &]
     NUMBER_CHARS = ('0'..'9').to_a
@@ -18,6 +19,7 @@ module Password
 		  validate_options
 		end
 
+    # Generate Password
     def generate
       return error if error
 
@@ -35,6 +37,7 @@ module Password
 
     private
 
+    # Validate arguments to check invalid options
     def validate_options
       unless length.is_a?(Integer) && length.positive?
         @error = "Length must be a positive integer."
@@ -64,14 +67,17 @@ module Password
       end
     end
 
+    # Randmonly pick one speical char from SPECIAL_CHARS
     def special_chars
       Array.new(special) { SPECIAL_CHARS.sample }
     end
 
+    # Randmonly pick one number from NUMBER_CHARS
     def number_chars
       Array.new(number) { NUMBER_CHARS.sample }
     end
 
+    # Randmonly pick letters from UPPER_CHARS and LOWER_CHARS
     def required_letters
       letters = []
       letters << UPPER_CHARS.sample if uppercase
@@ -79,6 +85,7 @@ module Password
       letters
     end
 
+    # Return available letters
     def available_letters
       chars = []
       chars += UPPER_CHARS if uppercase
