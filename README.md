@@ -58,8 +58,7 @@ Example output: {:success=>true, :password=>"A2k@z9dfuLp3"}
 ```ruby
 generator = Password::Generator.new(length: "ten", uppercase: true, lowercase: nil, number: "two", special: 1)
 result = generator.generate
-puts result
-result {:success=>false, :error=>["Lowercase must be provided.", "Length must be an integer.", "Number must be a non-negative integer.", "Lowercase must be a boolean value."]}
+puts result # => {:success=>false, :error=>["Lowercase must be provided.", "Length must be an integer.", "Number must be a non-negative integer.", "Lowercase must be a boolean value."]}
 
 puts result[:error] # => ["Lowercase must be provided.", "Length must be an integer.", "Number must be a non-negative integer.", "Lowercase must be a boolean value."]
 
