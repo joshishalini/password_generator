@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require_relative './validator'
 
 module Password
   # This class is responsible to Generate Password
   class Generator
-    SPECIAL_CHARS = %w[@ % ! ? * ^ &]
+    SPECIAL_CHARS = %w[@ % ! ? * ^ &].freeze
     NUMBER_CHARS = ('0'..'9').to_a
     LOWER_CHARS = ('a'..'z').to_a
     UPPER_CHARS = ('A'..'Z').to_a
@@ -12,21 +14,21 @@ module Password
 
     # Initialize the generator with configuration options
     def initialize(length:, uppercase: true, lowercase: true, number: 2, special: 1)
-		  @length = length
-		  @uppercase = uppercase
-		  @lowercase = lowercase
-		  @number = number
-		  @special = special
+      @length = length
+      @uppercase = uppercase
+      @lowercase = lowercase
+      @number = number
+      @special = special
       @errors = []
 
-		  validate_options
-		end
+      validate_options
+    end
 
     # It generate a password
     # Returns a hash with success status and either password or error message
     def generate
       return { success: false, error: errors } unless errors.empty?
-      
+
       password = build_password
 
       { success: true, password: password }
@@ -58,7 +60,7 @@ module Password
       remaining = length - password.size
 
       # Fill remaining characters with random letters from available letters
-      password += pick_random(available_letters, remaining) unless remaining < 0
+      password += pick_random(available_letters, remaining) unless remaining.negative?
 
       password.shuffle.join # Shuffle to randomize order
     end

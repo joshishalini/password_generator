@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rspec'
 require_relative '../../lib/password/generator'
 
@@ -30,26 +32,24 @@ RSpec.describe Password::Generator do
       it 'returns an error with success false' do
         result = generator.generate
         expect(result[:success]).to eq(false)
-        expect(result[:error].join).to include("Password too short")
+        expect(result[:error].join).to include('Password too short')
       end
     end
 
     context 'with invalid parameter types' do
-      let(:params) { { length: 'eight', uppercase: "yes", lowercase: nil, number: "two", special: -1 } }
+      let(:params) { { length: 'eight', uppercase: 'yes', lowercase: nil, number: 'two', special: -1 } }
 
       it 'returns an error due to validation failure' do
         result = described_class.new(**params).generate
         expect(result[:success]).to eq(false)
 
-        puts result
-
         expect(result[:error]).to include(
-          "Lowercase must be provided.",
-          "Length must be an integer.",
-          "Number must be a non-negative integer.",
-          "Special must be a non-negative integer.",
-          "Uppercase must be a boolean value.",
-          "Lowercase must be a boolean value."
+          'Lowercase must be provided.',
+          'Length must be an integer.',
+          'Number must be a non-negative integer.',
+          'Special must be a non-negative integer.',
+          'Uppercase must be a boolean value.',
+          'Lowercase must be a boolean value.'
         )
       end
     end

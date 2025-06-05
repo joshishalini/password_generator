@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rspec'
 require_relative '../../lib/password/validator'
 
@@ -21,11 +23,11 @@ RSpec.describe Password::Validator do
 
       it 'collects all missing field errors' do
         expect(validator.errors).to include(
-          "Length must be provided.",
-          "Uppercase must be provided.",
-          "Lowercase must be provided.",
-          "Number must be provided.",
-          "Special must be provided."
+          'Length must be provided.',
+          'Uppercase must be provided.',
+          'Lowercase must be provided.',
+          'Number must be provided.',
+          'Special must be provided.'
         )
       end
     end
@@ -35,7 +37,7 @@ RSpec.describe Password::Validator do
 
       it 'fails when length is not a positive integer' do
         expect(validator.valid?).to eq(false)
-        expect(validator.errors).to include("Length must be a positive integer.")
+        expect(validator.errors).to include('Length must be a positive integer.')
       end
     end
 
@@ -44,7 +46,7 @@ RSpec.describe Password::Validator do
 
       it 'fails when number is negative' do
         expect(validator.valid?).to eq(false)
-        expect(validator.errors).to include("Number must be a non-negative integer.")
+        expect(validator.errors).to include('Number must be a non-negative integer.')
       end
     end
 
@@ -53,7 +55,7 @@ RSpec.describe Password::Validator do
 
       it 'fails when special is negative' do
         expect(validator.valid?).to eq(false)
-        expect(validator.errors).to include("Special must be a non-negative integer.")
+        expect(validator.errors).to include('Special must be a non-negative integer.')
       end
     end
 
@@ -63,8 +65,8 @@ RSpec.describe Password::Validator do
       it 'fails when uppercase and lowercase are not booleans' do
         expect(validator.valid?).to eq(false)
         expect(validator.errors).to include(
-          "Uppercase must be a boolean value.",
-          "Lowercase must be a boolean value."
+          'Uppercase must be a boolean value.',
+          'Lowercase must be a boolean value.'
         )
       end
     end
@@ -75,7 +77,7 @@ RSpec.describe Password::Validator do
       before { validator.valid? }
 
       it 'fails with message requiring at least one letter case' do
-        expect(validator.errors).to include("At least one of uppercase or lowercase must be true.")
+        expect(validator.errors).to include('At least one of uppercase or lowercase must be true.')
       end
     end
 
@@ -85,7 +87,7 @@ RSpec.describe Password::Validator do
       before { validator.valid? }
 
       it 'fails with error indicating password too short' do
-        expect(validator.errors).to include("Password too short: length=3, but requires at least 5 characters.")
+        expect(validator.errors).to include('Password too short: length=3, but requires at least 5 characters.')
       end
     end
 
@@ -104,7 +106,7 @@ RSpec.describe Password::Validator do
       before { validator.valid? }
 
       it 'fails with max length exceeded error' do
-        expect(validator.errors).to include("Length cannot exceed 1024 characters.")
+        expect(validator.errors).to include('Length cannot exceed 1024 characters.')
       end
     end
   end
