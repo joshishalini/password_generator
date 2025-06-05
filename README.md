@@ -2,15 +2,6 @@
 
 A simple, configurable Ruby library for generating secure passwords.
 
-## Personal Note
-
-Thanks for taking the time to have another look. I really appreciate it.
-
-I know the earlier submission felt rushed, I should have taken a bit more time to do it justice. I’ve cleaned things up, added better error handling, comments, and tests.
-
-Thanks again for your the feedback, it genuinely helped.
-
-
 ## Installation
 
 ```
