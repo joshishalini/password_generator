@@ -3,7 +3,7 @@
 require_relative './validator'
 
 module Password
-  # This class is responsible to Generate Password
+  # This class is responsible for generating secure passwords
   class Generator
     SPECIAL_CHARS = %w[@ % ! ? * ^ &].freeze
     NUMBER_CHARS = ('0'..'9').to_a
@@ -24,8 +24,9 @@ module Password
       validate_options
     end
 
-    # It generate a password
+    # Generates a password
     # Returns a hash with success status and either password or error message
+    # @return [Hash]
     def generate
       return { success: false, error: errors } unless errors.empty?
 
@@ -46,11 +47,13 @@ module Password
         special: special
       )
 
-      @errors = validator.errors unless validator.valid?
+      unless validator.valid?
+        @errors = validator.errors
+      end
     end
 
     # Build the password by assembling required components
-    # Return a string
+    # @return [String]
     def build_password
       password = []
       password += pick_random(SPECIAL_CHARS, special)
@@ -72,7 +75,7 @@ module Password
       Array.new(count) { source.sample }
     end
 
-    # Randmonly pick letters from UPPER_CHARS and LOWER_CHARS
+    # Randomly picks one letter from each selected case (upper/lower)
     def required_letters
       letters = []
       letters << UPPER_CHARS.sample if uppercase
@@ -91,4 +94,4 @@ module Password
 end
 
 # Example usage
-puts Password::Generator.new(length: 200, uppercase: false, lowercase: true, number: 1, special: 1).generate
+puts Password::Generator.new(length: 8, uppercase: false, lowercase: true, number: 1, special: 1).generate
