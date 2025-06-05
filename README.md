@@ -2,11 +2,19 @@
 
 A simple, configurable Ruby library for generating secure passwords.
 
+## Installation
+
+```
+git clone https://github.com/your-username/password-generator.git
+cd password-generator
+bundle install
+```
+
 
 ## 🔧 Features
 
 - Define total password length
-- Include exact number of digits and special characters
+- Specify exact number of digits and special characters
 - Ensure at least one uppercase/lowercase character
 - Validates input for logical consistency
 - Fully tested with RSpec
@@ -17,15 +25,22 @@ A simple, configurable Ruby library for generating secure passwords.
 require_relative 'lib/password/generator'
 
 generator = Password::Generator.new(
-  length: 8,
+  length: 12,
   uppercase: true,
   lowercase: true,
   number: 2,
   special: 1
 )
 
-puts generator.generate
-# => e.g., "A7S1!uRq"
+result = generator.generate
+
+if result[:success]
+  puts "Generated Password: #{result[:password]}"
+else
+  puts "Error: #{result[:error]}"
+end
+
+Example output: {:success=>true, :password=>"A2k@z9dfuLp3"}
 
 ```
 ## ⚙️ Test

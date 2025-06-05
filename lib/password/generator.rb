@@ -1,3 +1,5 @@
+require_relative './validator'
+
 module Password
   # This class is responsible to Generate Password
   class Generator
@@ -6,75 +8,66 @@ module Password
     LOWER_CHARS = ('a'..'z').to_a
     UPPER_CHARS = ('A'..'Z').to_a
 
-    attr_reader :length, :uppercase, :lowercase, :number, :special, :error
+    attr_reader :length, :uppercase, :lowercase, :number, :special, :errors
 
+    # Initialize the generator with configuration options
     def initialize(length:, uppercase: true, lowercase: true, number: 2, special: 1)
 		  @length = length
 		  @uppercase = uppercase
 		  @lowercase = lowercase
 		  @number = number
 		  @special = special
-      @error = nil
+      @errors = []
 
 		  validate_options
 		end
 
-    # Generate Password
+    # It generate a password
+    # Returns a hash with success status and either password or error message
     def generate
-      return error if error
+      return { success: false, error: errors } unless errors.empty?
+      
+      password = build_password
 
-      password = []
-      password += special_chars
-      password += number_chars
-      password += required_letters
-
-      remaining = length - password.size
-
-      password += Array.new(remaining) { available_letters.sample } unless remaining < 0
-
-      password.shuffle.join
+      { success: true, password: password }
     end
 
     private
 
-    # Validate arguments to check invalid options
+    # Validates the input parameters using the Validator class
     def validate_options
-      unless length.is_a?(Integer) && length.positive?
-        @error = "Length must be a positive integer."
-        return
-      end
+      validator = Password::Validator.new(
+        length: length,
+        uppercase: uppercase,
+        lowercase: lowercase,
+        number: number,
+        special: special
+      )
 
-      unless number.is_a?(Integer) && number >= 0
-        @error = "Number must be a non-negative integer."
-        return
-      end
-
-      unless special.is_a?(Integer) && special >= 0
-        @error = "Special must be a non-negative integer."
-        return
-      end
-
-      unless uppercase || lowercase
-        @error = "At least one of uppercase or lowercase must be true."
-        return
-      end
-
-      required_letters_count = (uppercase ? 1 : 0) + (lowercase ? 1 : 0)
-      total_required = number + special + required_letters_count
-
-      if total_required > length
-        @error = "Password too short: length=#{length}, but requires at least #{total_required} characters."
-      end
+      @errors = validator.errors unless validator.valid?
     end
 
-    # Randmonly pick one speical char from SPECIAL_CHARS
-    def special_chars
-      Array.new(special) { SPECIAL_CHARS.sample }
+    # Build the password by assembling required components
+    # Return a string
+    def build_password
+      password = []
+      password += pick_random(SPECIAL_CHARS, special)
+      password += pick_random(NUMBER_CHARS, number)
+      password += required_letters
+
+      remaining = length - password.size
+
+      # Fill remaining characters with random letters from available letters
+      password += pick_random(available_letters, remaining) unless remaining < 0
+
+      password.shuffle.join # Shuffle to randomize order
     end
 
-    # Randmonly pick one number from NUMBER_CHARS
-    def number_chars
-      Array.new(number) { NUMBER_CHARS.sample }
+    # Returns a random selection of characters from a source array
+    def pick_random(source, count)
+      return [] if count <= 0
+
+      Array.new(count) { source.sample }
     end
 
     # Randmonly pick letters from UPPER_CHARS and LOWER_CHARS
@@ -95,4 +88,5 @@ module Password
   end
 end
 
-puts Password::Generator.new(length: 8, uppercase: true, lowercase: true, number: -1, special: 0).generate
+# Example usage
+puts Password::Generator.new(length: 200, uppercase: false, lowercase: true, number: 1, special: 1).generate
