@@ -53,7 +53,7 @@ Example output: {:success=>true, :password=>"A2k@z9dfuLp3"}
 
 ```
 
-# Example Invalid Usage
+## Example Invalid Usage
 
 ```ruby
 generator = Password::Generator.new(length: "ten", uppercase: true, lowercase: nil, number: "two", special: 1)
